@@ -52,6 +52,17 @@
     }
     .logo img:hover { transform: scale(1.1); }
     .logo h1 { font-size: 1.5em; color: #64ffda; }
+    
+    /* Hamburger Menu Button */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #ccd6f6;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    
     nav ul {
       list-style: none;
       display: flex;
@@ -155,8 +166,29 @@
     
     /* Responsive Styles */
     @media (max-width: 768px) {
-      nav ul { flex-direction: column; }
-      nav ul li { margin: 10px 0; }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .menu-toggle {
+        display: block;
+      }
+      nav {
+        display: none;
+        width: 100%;
+      }
+      nav.active {
+        display: block;
+      }
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+      }
+      nav ul li {
+        margin: 10px 0;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -170,6 +202,8 @@
       <img src="profile.jpg" alt="Profile Picture" />
       <h1>Nour Hakam</h1>
     </div>
+    <!-- Hamburger Menu Button for Mobile -->
+    <button class="menu-toggle" aria-label="Toggle navigation">&#9776;</button>
     <nav>
       <ul>
         <li><a href="#hero">Home</a></li>
@@ -198,7 +232,7 @@
     <section id="about">
       <h2>About Me</h2>
       <p>
-        I'm a 20-year-old IT enthusiast passionate about cybersecurity, networking, and programming.
+        I am a 20-years-old IT enthusiast passionate about cybersecurity, networking, and programming.
         I use Python for personal tasks and automation.
         With hands-on experience from internships and projects, I strive for continuous learning and improvement.
       </p>
@@ -207,26 +241,25 @@
     <!-- Skills Section -->
     <section id="skills">
       <h2>Skills</h2>
-       <div class="skill">
+      <div class="skill">
         <div class="skill-name">Ethical Hacking <span style="color: orange;">In Progress</span></div>
+      </div>
+      <div class="skill">
+        <div class="skill-name">OOP (60%)</div>
+        <div class="progress">
+          <div class="progress-bar" data-percentage="60">60%</div>
         </div>
       </div>
       <div class="skill">
-        <div class="skill-name">OOP (50%)</div>
+        <div class="skill-name">Data Structures (50%)</div>
         <div class="progress">
           <div class="progress-bar" data-percentage="50">50%</div>
         </div>
       </div>
       <div class="skill">
-        <div class="skill-name">Data Structures (40%)</div>
+        <div class="skill-name">Database (60%)</div>
         <div class="progress">
-          <div class="progress-bar" data-percentage="40">40%</div>
-        </div>
-      </div>
-      <div class="skill">
-        <div class="skill-name">Database (50%)</div>
-        <div class="progress">
-          <div class="progress-bar" data-percentage="50">50%</div>
+          <div class="progress-bar" data-percentage="60">60%</div>
         </div>
       </div>
       <div class="skill">
@@ -236,9 +269,9 @@
         </div>
       </div>
       <div class="skill">
-        <div class="skill-name">Java (40%)</div>
+        <div class="skill-name">Java (55%)</div>
         <div class="progress">
-          <div class="progress-bar" data-percentage="40">40%</div>
+          <div class="progress-bar" data-percentage="55">55%</div>
         </div>
       </div>
       <div class="skill">
@@ -248,15 +281,15 @@
         </div>
       </div>
       <div class="skill">
-        <div class="skill-name">C++ (10%)</div>
+        <div class="skill-name">C++ (20%)</div>
         <div class="progress">
-          <div class="progress-bar" data-percentage="10">10%</div>
+          <div class="progress-bar" data-percentage="20">20%</div>
         </div>
       </div>
       <div class="skill">
-        <div class="skill-name">Networking (20%)</div>
+        <div class="skill-name">Networking (30%)</div>
         <div class="progress">
-          <div class="progress-bar" data-percentage="20">20%</div>
+          <div class="progress-bar" data-percentage="30">30%</div>
         </div>
       </div>
     </section>
@@ -266,11 +299,11 @@
       <h2>Certifications &amp; Courses</h2>
       <div class="list-container">
         <ul>
-          <li>Ethical Hacking 101: <span style="color: orange;">In Progress</span></li>
           <li>IC3 Course: <span style="color: limegreen;">Completed</span></li>
-          <li>Automation: <span style="color: orange;">In Progress</span></li>
-          <li>Data Science: <span style="color: tomato;">Planned Soon</span></li>
           <li>Data Mining: <span style="color: limegreen;">Completed</span></li>
+          <li>Automation: <span style="color: orange;">In Progress</span></li>
+          <li>Ethical Hacking 101: <span style="color: orange;">In Progress</span></li>
+          <li>Data Science: <span style="color: tomato;">Planned Soon</span></li>
         </ul>
       </div>
     </section>
@@ -394,6 +427,15 @@
     }, observerOptions);
     
     sections.forEach(section => observer.observe(section));
+    
+    /* ---------------------------
+       Mobile Navigation Toggle
+    ----------------------------- */
+    const menuToggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('active');
+    });
   </script>
 </body>
 </html>
