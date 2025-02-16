@@ -1,18 +1,163 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بحبك يا سارة ❤️</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بحبك يا سارة ❤️</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Cairo', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff9a9e, #fad0c4);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container for text and button */
+    .container {
+      z-index: 10;
+      text-align: center;
+      padding: 20px 40px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      animation: slideIn 1s ease-out;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Heading and paragraph animations */
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff; }
+      to { text-shadow: 0 0 30px #ff2e63; }
+    }
+    p {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      color: #fff;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+      animation-delay: 1s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Button styling */
+    button {
+      background: #ff4b2b;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 50px;
+      transition: transform 0.3s, background 0.3s;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      background: #ff2e63;
+      transform: scale(1.1);
+    }
+
+    /* Floating hearts container */
+    #hearts-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 5;
+    }
+    .heart {
+      position: absolute;
+      color: #ffcccb;
+      font-size: 2rem;
+      opacity: 0.9;
+      animation: floatHeart 4s linear forwards;
+    }
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(100vh) scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="glow">بحبك يا سارة ❤️</h1>
-        <p class="fade-in">عيد حب سعيد!</p>
-        <button id="heart-btn">💖 انقر ليزيد الحب 💖</button>
-    </div>
-    <div id="hearts-container"></div>
+  <div class="container">
+    <h1 class="glow">بحبك يا سارة ❤️</h1>
+    <p class="fade-in">عيد حب سعيد!</p>
+    <button id="heart-btn">💖 انقر ليزيد الحب 💖</button>
+  </div>
+  <div id="hearts-container"></div>
+  <script>
+    // Utility to generate random numbers in a range
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    // Function to create and animate a heart element
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '💖';
+      heart.style.left = random(0, 100) + 'vw'; // Random horizontal start
+      const duration = random(3, 6); // Random duration between 3 and 6 seconds
+      heart.style.animationDuration = duration + 's';
+      heart.style.animationDelay = random(0, 2) + 's';
+      document.getElementById('hearts-container').appendChild(heart);
+      // Remove heart after animation to clean up the DOM
+      setTimeout(() => {
+        heart.remove();
+      }, duration * 1000);
+    }
+
+    // Add hearts on button click
+    document.getElementById('heart-btn').addEventListener('click', () => {
+      for (let i = 0; i < 10; i++) {
+        createHeart();
+      }
+    });
+
+    // Continuously create hearts in the background
+    setInterval(createHeart, 500);
+  </script>
 </body>
 </html>
