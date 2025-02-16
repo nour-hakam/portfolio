@@ -1,88 +1,95 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع صديقي العزيز</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #40E0D0, #008080);
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-top: 50px;
-            opacity: 0;
-        }
-        .poem {
-            font-size: 1.5rem;
-            margin: 20px;
-            opacity: 0;
-        }
-        img {
-            width: 200px;
-            border-radius: 50%;
-            border: 5px solid #556B2F;
-            margin-top: 20px;
-            opacity: 0;
-        }
-        button {
-            background-color: #556B2F;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px;
-            opacity: 0;
-        }
-        .reactions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .reaction-btn {
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .reaction-btn:hover {
-            transform: scale(1.2);
-        }
-    </style>
-</head>
-<body>
-    <h1 id="title">صديقي العزيز، أنت كنزي الثمين</h1>
-    <img id="friend-img" src="صورة_صديقك.jpg" alt="صديقي">
-    <div id="poem" class="poem">
-        الصداقة بحرٌ لا ساحلَ لهُ<br>
+import React, { useEffect, useRef } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { gsap } from "gsap";
+import "./styles.css";
+
+function App() {
+  const titleControls = useAnimation();
+  const imgControls = useAnimation();
+  const poemControls = useAnimation();
+  const buttonControls = useAnimation();
+
+  useEffect(() => {
+    // GSAP Animation for Background
+    gsap.from(".background-wave", {
+      duration: 5,
+      x: -100,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
+    });
+
+    // Framer Motion Animations
+    titleControls.start({ opacity: 1, y: 0 });
+    imgControls.start({ opacity: 1, scale: 1, rotate: 360 });
+    poemControls.start({ opacity: 1, x: 0 });
+    buttonControls.start({ opacity: 1, y: 0 });
+  }, [titleControls, imgControls, poemControls, buttonControls]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-teal-400 to-teal-800 text-white flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Background Waves */}
+      <div className="background-wave absolute w-200 h-200 bg-teal-300 rounded-full opacity-20 -bottom-20 -left-20"></div>
+      <div className="background-wave absolute w-300 h-300 bg-teal-200 rounded-full opacity-20 -top-20 -right-20"></div>
+
+      {/* Title */}
+      <motion.h1
+        initial={{ opacity: 0, y: -50 }}
+        animate={titleControls}
+        transition={{ duration: 1 }}
+        className="text-5xl font-bold mb-8"
+      >
+        صديقي العزيز، أنت كنزي الثمين
+      </motion.h1>
+
+      {/* Image */}
+      <motion.img
+        initial={{ opacity: 0, scale: 0.5, rotate: 0 }}
+        animate={imgControls}
+        transition={{ duration: 1.5, type: "spring" }}
+        src="صورة_صديقك.jpg"
+        alt="صديقي"
+        className="w-48 h-48 rounded-full border-4 border-green-900 shadow-lg"
+      />
+
+      {/* Poem */}
+      <motion.div
+        initial={{ opacity: 0, x: -100 }}
+        animate={poemControls}
+        transition={{ duration: 2 }}
+        className="text-2xl mt-8"
+      >
+        الصداقة بحرٌ لا ساحلَ لهُ<br />
         والإخوة نورٌ في ظلام الدجى
-    </div>
-    <button id="message-btn">أرسل رسالة</button>
-    <div class="reactions">
-        <div class="reaction-btn" onclick="react('❤️')">❤️</div>
-        <div class="reaction-btn" onclick="react('😂')">😂</div>
-        <div class="reaction-btn" onclick="react('🤗')">🤗</div>
-    </div>
+      </motion.div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
-    <script>
-        // GSAP Animations
-        gsap.from("#title", { duration: 2, opacity: 0, y: -50, ease: "power2.out" });
-        gsap.from("#friend-img", { duration: 2, opacity: 0, scale: 0.5, rotation: 360, ease: "elastic.out(1, 0.3)", delay: 1 });
-        gsap.from("#poem", { duration: 3, opacity: 0, x: -100, ease: "power2.out", delay: 2 });
-        gsap.from("#message-btn", { duration: 2, opacity: 0, y: 50, ease: "bounce.out", delay: 3 });
+      {/* Message Button */}
+      <motion.button
+        initial={{ opacity: 0, y: 50 }}
+        animate={buttonControls}
+        transition={{ duration: 1, delay: 1 }}
+        onClick={() => alert("رسالة حب لصديقي!")}
+        className="mt-8 px-6 py-3 bg-green-900 text-white rounded-lg shadow-lg hover:bg-green-700 transition-all"
+      >
+        أرسل رسالة
+      </motion.button>
 
-        // Reaction Function
-        function react(emoji) {
-            alert(`تفاعلت بـ ${emoji} مع صديقك!`);
-        }
-    </script>
-</body>
-</html>
+      {/* Reactions */}
+      <div className="flex gap-4 mt-8">
+        {["❤️", "😂", "🤗"].map((emoji, index) => (
+          <motion.div
+            key={index}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => alert(`تفاعلت بـ ${emoji} مع صديقك!`)}
+            className="text-3xl cursor-pointer"
+          >
+            {emoji}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;
