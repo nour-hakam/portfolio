@@ -1,95 +1,132 @@
-import React, { useEffect, useRef } from "react";
-import { motion, useAnimation } from "framer-motion";
-import { gsap } from "gsap";
-import "./styles.css";
-
-function App() {
-  const titleControls = useAnimation();
-  const imgControls = useAnimation();
-  const poemControls = useAnimation();
-  const buttonControls = useAnimation();
-
-  useEffect(() => {
-    // GSAP Animation for Background
-    gsap.from(".background-wave", {
-      duration: 5,
-      x: -100,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    });
-
-    // Framer Motion Animations
-    titleControls.start({ opacity: 1, y: 0 });
-    imgControls.start({ opacity: 1, scale: 1, rotate: 360 });
-    poemControls.start({ opacity: 1, x: 0 });
-    buttonControls.start({ opacity: 1, y: 0 });
-  }, [titleControls, imgControls, poemControls, buttonControls]);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-400 to-teal-800 text-white flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Background Waves */}
-      <div className="background-wave absolute w-200 h-200 bg-teal-300 rounded-full opacity-20 -bottom-20 -left-20"></div>
-      <div className="background-wave absolute w-300 h-300 bg-teal-200 rounded-full opacity-20 -top-20 -right-20"></div>
-
-      {/* Title */}
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={titleControls}
-        transition={{ duration: 1 }}
-        className="text-5xl font-bold mb-8"
-      >
-        صديقي العزيز، أنت كنزي الثمين
-      </motion.h1>
-
-      {/* Image */}
-      <motion.img
-        initial={{ opacity: 0, scale: 0.5, rotate: 0 }}
-        animate={imgControls}
-        transition={{ duration: 1.5, type: "spring" }}
-        src="صورة_صديقك.jpg"
-        alt="صديقي"
-        className="w-48 h-48 rounded-full border-4 border-green-900 shadow-lg"
-      />
-
-      {/* Poem */}
-      <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={poemControls}
-        transition={{ duration: 2 }}
-        className="text-2xl mt-8"
-      >
-        الصداقة بحرٌ لا ساحلَ لهُ<br />
-        والإخوة نورٌ في ظلام الدجى
-      </motion.div>
-
-      {/* Message Button */}
-      <motion.button
-        initial={{ opacity: 0, y: 50 }}
-        animate={buttonControls}
-        transition={{ duration: 1, delay: 1 }}
-        onClick={() => alert("رسالة حب لصديقي!")}
-        className="mt-8 px-6 py-3 bg-green-900 text-white rounded-lg shadow-lg hover:bg-green-700 transition-all"
-      >
-        أرسل رسالة
-      </motion.button>
-
-      {/* Reactions */}
-      <div className="flex gap-4 mt-8">
-        {["❤️", "😂", "🤗"].map((emoji, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => alert(`تفاعلت بـ ${emoji} مع صديقك!`)}
-            className="text-3xl cursor-pointer"
-          >
-            {emoji}
-          </motion.div>
-        ))}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nour Hakam's Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="profile.jpg" alt="Nour Hakam" class="profile-img">
+        <h1>Nour Hakam</h1>
       </div>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#certifications">Certifications</a></li>
+          <li><a href="#languages">Languages</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+        </ul>
+      </nav>
     </div>
-  );
-}
+  </header>
 
-export default App;
+  <main>
+    <!-- About Section -->
+    <section id="about" class="card fade-in">
+      <h2>About Me</h2>
+      <p>
+        I'm a 20-year-old cybersecurity and networking enthusiast with a solid background in IT and programming.
+        Leader in Scout Company since 2019.
+      </p>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="card fade-in">
+      <h2>Skills</h2>
+      <div class="skill">
+        <span>OOP</span>
+        <div class="progress">
+          <div class="progress-bar" style="--target-width: 70%;">70%</div>
+        </div>
+      </div>
+      <div class="skill">
+        <span>Data Structures</span>
+        <div class="progress">
+          <div class="progress-bar" style="--target-width: 50%;">50%</div>
+        </div>
+      </div>
+      <div class="skill">
+        <span>Database</span>
+        <div class="progress">
+          <div class="progress-bar" style="--target-width: 60%;">60%</div>
+        </div>
+      </div>
+      <div class="skill">
+        <span>Java</span>
+        <div class="progress">
+          <div class="progress-bar" style="--target-width: 40%;">40%</div>
+        </div>
+      </div>
+      <div class="skill">
+        <span>Python</span>
+        <div class="progress">
+          <div class="progress-bar" style="--target-width: 30%;">30%</div>
+        </div>
+      </div>
+      <div class="skill">
+        <span>C++</span>
+        <div class="progress">
+          <div class="progress-bar" style="--target-width: 10%;">10%</div>
+        </div>
+      </div>
+      <div class="skill">
+        <span>Networking</span>
+        <div class="progress">
+          <div class="progress-bar" style="--target-width: 20%;">20%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="card fade-in">
+      <h2>Certifications &amp; Courses</h2>
+      <ul>
+        <li>Ethical Hacking 101: <span class="status in-progress">In Progress</span></li>
+        <li>IC3 Course: <span class="status completed">Completed</span></li>
+        <li>Automation: <span class="status in-progress">In Progress</span></li>
+        <li>Data Science: <span class="status planned">Planned Soon</span></li>
+      </ul>
+    </section>
+
+    <!-- Languages Section -->
+    <section id="languages" class="card fade-in">
+      <h2>Languages</h2>
+      <ul>
+        <li>Arabic: Primary</li>
+        <li>English: B1</li>
+        <li>French: Little</li>
+      </ul>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="card fade-in">
+      <h2>Experience</h2>
+      <ul>
+        <li>Internship at Hoz Mall IT Department</li>
+        <li>Data Entry at a Petrol Station</li>
+      </ul>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="card fade-in">
+      <h2>Projects</h2>
+      <ul>
+        <li>Small project for a Petrol Station</li>
+        <li>Face Attendance System</li>
+        <li>Website for Blood Donation</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="fade-in">
+    <p>&copy; 2025 Nour Hakam. All Rights Reserved.</p>
+    <p>Contact: nour.hakam@example.com</p>
+  </footer>
+</body>
+</html>
