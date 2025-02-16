@@ -6,19 +6,12 @@
   <title>بحبك يا سارة ❤️</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
+
     /* Reset and base styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Cairo', sans-serif;
-      background: #000; /* fallback for canvas background */
-    }
-    /* Canvas for particle effects */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; background: #000; }
+
+    /* Canvas for particle background */
     #canvas-bg {
       position: absolute;
       top: 0;
@@ -27,6 +20,7 @@
       height: 100%;
       z-index: 1;
     }
+    
     /* Animated gradient overlay */
     body::after {
       content: "";
@@ -45,6 +39,7 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     /* Main content container */
     .container {
       position: relative;
@@ -59,7 +54,6 @@
       transform: perspective(800px) rotateX(0deg) rotateY(0deg);
       transition: transform 0.3s ease;
     }
-    /* Title and text */
     h1 {
       font-size: 4rem;
       color: #fff;
@@ -82,7 +76,6 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* Button styling */
     button {
       background: #ff4b2b;
       border: none;
@@ -98,6 +91,7 @@
       background: #ff2e63;
       transform: scale(1.1);
     }
+
     /* Floating hearts container */
     #hearts-container {
       position: absolute;
@@ -125,6 +119,7 @@
         opacity: 0;
       }
     }
+
     /* Confetti effect */
     .confetti {
       position: absolute;
@@ -147,19 +142,19 @@
   </style>
 </head>
 <body>
-  <!-- Canvas for dynamic particle background -->
+  <!-- Particle Background Canvas -->
   <canvas id="canvas-bg"></canvas>
-
-  <!-- Main content container -->
+  
+  <!-- Main Content Container -->
   <div class="container" id="content">
     <h1>بحبك يا سارة ❤️</h1>
     <p>عيد حب سعيد!</p>
     <button id="heart-btn">💖 انقر ليزيد الحب 💖</button>
   </div>
-
-  <!-- Container for floating hearts -->
+  
+  <!-- Floating Hearts Container -->
   <div id="hearts-container"></div>
-
+  
   <script>
     /* Advanced Particle Background using Canvas */
     const canvas = document.getElementById('canvas-bg');
@@ -170,9 +165,7 @@
     const particleCount = 100;
 
     class Particle {
-      constructor() {
-        this.reset();
-      }
+      constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
@@ -191,7 +184,7 @@
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, ' + this.alpha + ')';
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
         ctx.fill();
       }
     }
@@ -212,15 +205,7 @@
       canvas.height = window.innerHeight;
     });
 
-    /* Interactive tilt effect on the content container */
-    const container = document.getElementById('content');
-    document.addEventListener('mousemove', (e) => {
-      const xAxis = (window.innerWidth / 2 - e.clientX) / 20;
-      const yAxis = (window.innerHeight / 2 - e.clientY) / 20;
-      container.style.transform = `perspective(800px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-    });
-
-    /* Floating hearts effect */
+    /* Floating Hearts and Confetti Effects */
     function random(min, max) {
       return Math.random() * (max - min) + min;
     }
@@ -233,20 +218,8 @@
       heart.style.animationDuration = duration + 's';
       heart.style.animationDelay = random(0, 2) + 's';
       document.getElementById('hearts-container').appendChild(heart);
-      setTimeout(() => {
-        heart.remove();
-      }, duration * 1000);
+      setTimeout(() => { heart.remove(); }, duration * 1000);
     }
-    document.getElementById('heart-btn').addEventListener('click', () => {
-      // On click, generate multiple hearts and confetti pieces
-      for (let i = 0; i < 15; i++) {
-        createHeart();
-        createConfetti();
-      }
-    });
-    setInterval(createHeart, 500);
-
-    /* Confetti effect on click */
     function createConfetti() {
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
@@ -258,9 +231,49 @@
       const duration = random(3, 5);
       confetti.style.animationDuration = duration + 's';
       document.body.appendChild(confetti);
-      setTimeout(() => {
-        confetti.remove();
-      }, duration * 1000);
+      setTimeout(() => { confetti.remove(); }, duration * 1000);
+    }
+    function triggerEffects() {
+      // Generate multiple hearts and confetti pieces
+      for (let i = 0; i < 15; i++) {
+        createHeart();
+        createConfetti();
+      }
+      // Optional: vibrate device if supported
+      if (navigator.vibrate) { navigator.vibrate(200); }
+    }
+    
+    // Button click event to trigger effects
+    document.getElementById('heart-btn').addEventListener('click', triggerEffects);
+    
+    /* Mobile Shake Detection using Gyroscope (DeviceMotionEvent) */
+    let shakeThreshold = 15; // Adjust threshold as needed
+    let lastShakeTime = Date.now();
+    if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', (event) => {
+        const acc = event.accelerationIncludingGravity;
+        if (acc) {
+          const totalAcc = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
+          const currentTime = Date.now();
+          if (totalAcc > shakeThreshold && currentTime - lastShakeTime > 1000) {
+            lastShakeTime = currentTime;
+            triggerEffects();
+          }
+        }
+      });
+    } else {
+      console.log("Device motion not supported on this device.");
+    }
+    
+    /* Optional: Tilt effect for mobile using DeviceOrientation */
+    const container = document.getElementById('content');
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', (e) => {
+        // Map the gamma and beta angles to rotation values
+        const rotateY = e.gamma ? e.gamma / 5 : 0; // left/right tilt
+        const rotateX = e.beta ? e.beta / 5 : 0;   // front/back tilt
+        container.style.transform = `perspective(800px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+      });
     }
   </script>
 </body>
