@@ -30,7 +30,7 @@
     header {
       position: sticky;
       top: 0;
-      background-color: rgba(17, 34, 64, 0.95);
+      background-color: rgba(17, 34, 64, 1); /* 100% opacity */
       padding: 10px 20px;
       z-index: 1000;
       display: flex;
@@ -120,8 +120,6 @@
     .hero h1 { margin: 20px 0 10px; font-size: 2.5em; color: #64ffda; }
     .hero p { font-size: 1.2em; }
     
-    /* About Section Update */
-    /* Now includes "I use Python for personal tasks and automation." */
     /* Skills Section */
     .skill {
       margin-bottom: 20px;
@@ -166,28 +164,27 @@
     
     /* Responsive Styles */
     @media (max-width: 768px) {
+      /* Keep header horizontal */
       header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
       }
       .menu-toggle {
         display: block;
       }
       nav {
         display: none;
-        width: 100%;
       }
       nav.active {
-        display: block;
+        display: flex;
       }
       nav ul {
-        flex-direction: column;
+        flex-direction: row; /* keep nav items horizontal */
+        justify-content: center;
         width: 100%;
-        margin-top: 10px;
       }
       nav ul li {
-        margin: 10px 0;
-        text-align: center;
+        margin: 0 10px;
       }
     }
   </style>
