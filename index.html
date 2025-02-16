@@ -6,12 +6,12 @@
   <title>بحبك يا سارة ❤️</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
-
-    /* Reset and base styles */
+    
+    /* إعدادات عامة وإعادة تعيين */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; background: #000; }
 
-    /* Canvas for particle background */
+    /* خلفية الجسيمات باستخدام Canvas */
     #canvas-bg {
       position: absolute;
       top: 0;
@@ -21,7 +21,7 @@
       z-index: 1;
     }
     
-    /* Animated gradient overlay */
+    /* طبقة التدرج المتحرك */
     body::after {
       content: "";
       position: absolute;
@@ -40,7 +40,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Main content container */
+    /* الحاوية الرئيسية للمحتوى */
     .container {
       position: relative;
       z-index: 3;
@@ -51,14 +51,21 @@
       backdrop-filter: blur(15px);
       max-width: 600px;
       margin: auto;
-      transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+      /* تأثير بسيط للتنفس (pulse) لتكون مبدع أكثر */
+      animation: pulse 3s ease-in-out infinite;
+      transform: perspective(800px);
       transition: transform 0.3s ease;
     }
+    @keyframes pulse {
+      0%, 100% { transform: perspective(800px) scale(1); }
+      50% { transform: perspective(800px) scale(1.05); }
+    }
+    
     h1 {
       font-size: 4rem;
       color: #fff;
       margin-bottom: 20px;
-      animation: glow 3s ease-in-out infinite alternate;
+      animation: glow 2s ease-in-out infinite alternate;
     }
     @keyframes glow {
       from { text-shadow: 0 0 10px #fff; }
@@ -69,8 +76,8 @@
       color: #fff;
       margin-bottom: 30px;
       opacity: 0;
-      animation: fadeIn 2s forwards;
-      animation-delay: 1s;
+      animation: fadeIn 1.5s forwards;
+      animation-delay: 0.8s;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -91,8 +98,8 @@
       background: #ff2e63;
       transform: scale(1.1);
     }
-
-    /* Floating hearts container */
+    
+    /* حاوية القلوب المتحركة */
     #hearts-container {
       position: absolute;
       top: 0;
@@ -120,7 +127,7 @@
       }
     }
 
-    /* Confetti effect */
+    /* تأثير الكونفيتي */
     .confetti {
       position: absolute;
       width: 10px;
@@ -142,36 +149,37 @@
   </style>
 </head>
 <body>
-  <!-- Particle Background Canvas -->
+  <!-- خلفية الجسيمات -->
   <canvas id="canvas-bg"></canvas>
   
-  <!-- Main Content Container -->
+  <!-- الحاوية الرئيسية للمحتوى -->
   <div class="container" id="content">
     <h1>بحبك يا سارة ❤️</h1>
     <p>عيد حب سعيد!</p>
     <button id="heart-btn">💖 انقر ليزيد الحب 💖</button>
   </div>
   
-  <!-- Floating Hearts Container -->
+  <!-- حاوية القلوب المتحركة -->
   <div id="hearts-container"></div>
   
   <script>
-    /* Advanced Particle Background using Canvas */
+    /* خلفية الجسيمات باستخدام Canvas */
     const canvas = document.getElementById('canvas-bg');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     const particles = [];
     const particleCount = 100;
-
+    
     class Particle {
       constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.radius = Math.random() * 2 + 1;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.5 - 0.25;
+        // زيادة السرعة لتصبح الحركة أسرع
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
         this.alpha = Math.random() * 0.5 + 0.3;
       }
       update() {
@@ -193,10 +201,7 @@
     }
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let p of particles) {
-        p.update();
-        p.draw();
-      }
+      particles.forEach(p => { p.update(); p.draw(); });
       requestAnimationFrame(animateParticles);
     }
     animateParticles();
@@ -204,8 +209,8 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     });
-
-    /* Floating Hearts and Confetti Effects */
+    
+    /* تأثير القلوب والكونفيتي */
     function random(min, max) {
       return Math.random() * (max - min) + min;
     }
@@ -213,10 +218,13 @@
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.innerHTML = '💖';
+      // تغيير اللون عشوائياً لكل قلب
+      heart.style.color = `hsl(${random(0,360)},80%,60%)`;
       heart.style.left = random(0, 100) + 'vw';
-      const duration = random(4, 8);
+      // جعل مدة الحركة أسرع
+      const duration = random(2, 4);
       heart.style.animationDuration = duration + 's';
-      heart.style.animationDelay = random(0, 2) + 's';
+      heart.style.animationDelay = random(0, 1) + 's';
       document.getElementById('hearts-container').appendChild(heart);
       setTimeout(() => { heart.remove(); }, duration * 1000);
     }
@@ -224,30 +232,30 @@
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
       confetti.style.left = random(0, 100) + 'vw';
-      confetti.style.background = `hsl(${random(0, 360)}, 80%, 60%)`;
+      confetti.style.background = `hsl(${random(0,360)},80%,60%)`;
       const size = random(5, 10);
       confetti.style.width = size + 'px';
       confetti.style.height = size + 'px';
-      const duration = random(3, 5);
+      const duration = random(2, 3);
       confetti.style.animationDuration = duration + 's';
       document.body.appendChild(confetti);
       setTimeout(() => { confetti.remove(); }, duration * 1000);
     }
     function triggerEffects() {
-      // Generate multiple hearts and confetti pieces
+      // إنشاء عدة قلوب وقطع كونفيتي
       for (let i = 0; i < 15; i++) {
         createHeart();
         createConfetti();
       }
-      // Optional: vibrate device if supported
+      // اهتزاز بسيط للجهاز إن أمكن
       if (navigator.vibrate) { navigator.vibrate(200); }
     }
     
-    // Button click event to trigger effects
+    // تفعيل التأثير عند النقر على الزر (يظل لون الزر ثابت)
     document.getElementById('heart-btn').addEventListener('click', triggerEffects);
     
-    /* Mobile Shake Detection using Gyroscope (DeviceMotionEvent) */
-    let shakeThreshold = 15; // Adjust threshold as needed
+    /* كشف رجفة الهاتف باستخدام gyroscope (devicemotion) */
+    let shakeThreshold = 12; // تقليل العتبة لجعل الحركة أسرع
     let lastShakeTime = Date.now();
     if (window.DeviceMotionEvent) {
       window.addEventListener('devicemotion', (event) => {
@@ -255,23 +263,22 @@
         if (acc) {
           const totalAcc = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
           const currentTime = Date.now();
-          if (totalAcc > shakeThreshold && currentTime - lastShakeTime > 1000) {
+          if (totalAcc > shakeThreshold && currentTime - lastShakeTime > 800) {
             lastShakeTime = currentTime;
             triggerEffects();
           }
         }
       });
     } else {
-      console.log("Device motion not supported on this device.");
+      console.log("Device motion غير مدعوم على هذا الجهاز.");
     }
     
-    /* Optional: Tilt effect for mobile using DeviceOrientation */
+    /* تأثير ميل الحاوية على الهاتف باستخدام deviceorientation */
     const container = document.getElementById('content');
     if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', (e) => {
-        // Map the gamma and beta angles to rotation values
-        const rotateY = e.gamma ? e.gamma / 5 : 0; // left/right tilt
-        const rotateX = e.beta ? e.beta / 5 : 0;   // front/back tilt
+        const rotateY = e.gamma ? e.gamma / 5 : 0; // ميل يمين/يسار
+        const rotateX = e.beta ? e.beta / 5 : 0;    // ميل أمام/خلف
         container.style.transform = `perspective(800px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
       });
     }
