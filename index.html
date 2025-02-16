@@ -1,177 +1,71 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>رسالة حب سارة</title>
-  <style>
-    /* استيراد خط Cairo */
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
-    
-    /* إعادة تعيين الإعدادات العامة */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
-      height: 100%;
-      font-family: 'Cairo', sans-serif;
-      overflow: hidden;
-    }
-    
-    /* خلفية متدرجة متحركة */
-    body {
-      background: linear-gradient(120deg, #74ABE2, #5563DE);
-      background-size: 400% 400%;
-      animation: gradientAnimation 10s ease infinite;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    /* تصميم البطاقة الورقية */
-    .letter-card {
-      position: relative;
-      width: 90%;
-      max-width: 500px;
-      background: #fff;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      text-align: center;
-      z-index: 2;
-      transition: transform 0.3s ease;
-    }
-    .letter-card h1 {
-      font-size: 2.2rem;
-      color: #333;
-      margin-bottom: 10px;
-    }
-    .letter-card p {
-      font-size: 1.2rem;
-      color: #555;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-    button {
-      background: #5563DE;
-      color: #fff;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 30px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    button:hover {
-      transform: scale(1.1);
-    }
-    
-    /* حاوية التأثيرات (لطائرات ورقية) */
-    #effects-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 3;
-    }
-    /* تأثير الطائرة الورقية */
-    .paper-airplane {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      opacity: 0.9;
-      animation: flyAirplane 2.5s ease-out forwards;
-    }
-    @keyframes flyAirplane {
-      0% {
-        transform: translate(0, 0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(300px, -400px) rotate(720deg);
-        opacity: 0;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع صديقي العزيز</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #40E0D0, #008080);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-top: 50px;
+            animation: fadeIn 2s;
+        }
+        .poem {
+            font-size: 1.5rem;
+            margin: 20px;
+            animation: typing 4s steps(40, end);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        img {
+            width: 200px;
+            border-radius: 50%;
+            border: 5px solid #556B2F;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        button {
+            background-color: #556B2F;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
-  <!-- بطاقة الرسالة -->
-  <div class="letter-card" id="card">
-    <h1>حبيبتي سارة</h1>
-    <p>
-      كل يوم أكتب لكِ رسالة حب جديدة<br>
-      فأنتِ مصدر إلهامي ونور أيامي.
-    </p>
-    <button id="sendBtn">أرسل رسالتي</button>
-  </div>
-  
-  <!-- حاوية التأثيرات -->
-  <div id="effects-container"></div>
-  
-  <script>
-    // دالة لإرجاع رقم عشوائي بين قيمتين
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-    
-    // إنشاء تأثير الطائرة الورقية
-    function createPaperAirplane() {
-      const airplane = document.createElement('img');
-      // رسم طائرة ورقية باستخدام SVG مشفر بالـ data URI
-      airplane.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235563DE'><path d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/></svg>";
-      airplane.classList.add('paper-airplane');
-      // تعيين موضع بداية عشوائي على الجزء السفلي من الشاشة
-      airplane.style.left = random(10, 80) + 'vw';
-      airplane.style.top = '90vh';
-      airplane.style.animationDuration = random(2, 3) + 's';
-      document.getElementById('effects-container').appendChild(airplane);
-      setTimeout(() => airplane.remove(), 3000);
-    }
-    
-    // دالة لتفعيل التأثيرات عند النقر أو رجفة الهاتف
-    function triggerEffect() {
-      for (let i = 0; i < 5; i++) {
-        createPaperAirplane();
-      }
-      if (navigator.vibrate) {
-        navigator.vibrate(100);
-      }
-    }
-    
-    document.getElementById('sendBtn').addEventListener('click', triggerEffect);
-    
-    // كشف رجفة الهاتف باستخدام devicemotion
-    let shakeThreshold = 15;
-    let lastShakeTime = Date.now();
-    if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', (event) => {
-        const acc = event.accelerationIncludingGravity;
-        if (acc) {
-          const totalAcc = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
-          const currentTime = Date.now();
-          if (totalAcc > shakeThreshold && currentTime - lastShakeTime > 1000) {
-            lastShakeTime = currentTime;
-            triggerEffect();
-          }
-        }
-      });
-    }
-    
-    // تأثير ميل البطاقة باستخدام deviceorientation
-    const card = document.getElementById('card');
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', (e) => {
-        const rotateY = e.gamma ? e.gamma / 10 : 0;
-        const rotateX = e.beta ? e.beta / 10 : 0;
-        card.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
-      });
-    }
-  </script>
+    <h1>صديقي العزيز، أنت نور حياتي</h1>
+    <img src="صورة_صديقك.jpg" alt="صديقي">
+    <div class="poem">
+        الصداقة بحرٌ لا ساحلَ لهُ<br>
+        والإخوة نورٌ في ظلام الدجى
+    </div>
+    <button onclick="alert('رسالة حب لصديقي!')">أرسل رسالة</button>
 </body>
 </html>
