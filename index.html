@@ -15,7 +15,7 @@
       position: relative;
       scroll-behavior: smooth;
     }
-
+    
     /* Background Particle Canvas */
     #bgCanvas {
       position: fixed;
@@ -25,7 +25,7 @@
       height: 100%;
       z-index: -1;
     }
-
+    
     /* Header & Navigation */
     header {
       position: sticky;
@@ -64,12 +64,18 @@
       transition: color 0.3s;
     }
     nav ul li a:hover { color: #64ffda; }
-
-    /* Section Styles */
+    
+    /* Section Styles with Glass Effect */
     section {
       padding: 60px 20px;
       max-width: 1000px;
-      margin: 0 auto;
+      margin: 40px auto;
+      background: rgba(17, 34, 64, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(100, 255, 218, 0.2);
       opacity: 0;
       transform: translateY(20px);
       transition: all 1s ease;
@@ -86,7 +92,7 @@
       padding-bottom: 5px;
     }
     section p, section li { font-size: 1em; margin-bottom: 10px; }
-
+    
     /* Hero Section */
     .hero {
       text-align: center;
@@ -102,7 +108,7 @@
     .hero img:hover { transform: scale(1.1); }
     .hero h1 { margin: 20px 0 10px; font-size: 2.5em; color: #64ffda; }
     .hero p { font-size: 1.2em; }
-
+    
     /* Skills Section */
     .skill {
       margin-bottom: 20px;
@@ -128,14 +134,14 @@
       padding-right: 10px;
       transition: width 2s ease;
     }
-
+    
     /* List Containers for Certifications, Languages, Experience, Projects */
     .list-container ul { list-style: none; }
     .list-container ul li {
       padding: 10px 0;
-      border-bottom: 1px solid #1f2a48;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
     }
-
+    
     /* Footer */
     footer {
       background: rgba(17, 34, 64, 0.95);
@@ -144,7 +150,7 @@
       margin-top: 40px;
     }
     footer p { margin: 5px 0; }
-
+    
     /* Responsive Styles */
     @media (max-width: 768px) {
       nav ul { flex-direction: column; }
@@ -153,9 +159,9 @@
   </style>
 </head>
 <body>
-  <!-- Background Animation Canvas -->
+  <!-- Background Particle Canvas -->
   <canvas id="bgCanvas"></canvas>
-
+  
   <!-- Header & Navigation -->
   <header>
     <div class="logo">
@@ -174,7 +180,7 @@
       </ul>
     </nav>
   </header>
-
+  
   <!-- Main Content -->
   <main>
     <!-- Hero Section -->
@@ -185,7 +191,7 @@
         <p>Cybersecurity &amp; Networking Enthusiast | Aspiring Developer</p>
       </div>
     </section>
-
+    
     <!-- About Section -->
     <section id="about">
       <h2>About Me</h2>
@@ -194,26 +200,26 @@
         With hands-on experience from internships and projects, I strive for continuous learning and improvement.
       </p>
     </section>
-
+    
     <!-- Skills Section -->
     <section id="skills">
       <h2>Skills</h2>
       <div class="skill">
-        <div class="skill-name">OOP (70%)</div>
+        <div class="skill-name">OOP (60%)</div>
         <div class="progress">
-          <div class="progress-bar" data-percentage="70">70%</div>
+          <div class="progress-bar" data-percentage="70">60%</div>
         </div>
       </div>
       <div class="skill">
-        <div class="skill-name">Data Structures (50%)</div>
+        <div class="skill-name">Data Structures (40%)</div>
         <div class="progress">
-          <div class="progress-bar" data-percentage="50">50%</div>
+          <div class="progress-bar" data-percentage="50">40%</div>
         </div>
       </div>
       <div class="skill">
-        <div class="skill-name">Database (60%)</div>
+        <div class="skill-name">Database (50%)</div>
         <div class="progress">
-          <div class="progress-bar" data-percentage="60">60%</div>
+          <div class="progress-bar" data-percentage="60">50%</div>
         </div>
       </div>
       <div class="skill">
@@ -241,7 +247,7 @@
         </div>
       </div>
     </section>
-
+    
     <!-- Certifications & Courses -->
     <section id="certifications">
       <h2>Certifications &amp; Courses</h2>
@@ -254,7 +260,7 @@
         </ul>
       </div>
     </section>
-
+    
     <!-- Languages -->
     <section id="languages">
       <h2>Languages</h2>
@@ -266,7 +272,7 @@
         </ul>
       </div>
     </section>
-
+    
     <!-- Experience -->
     <section id="experience">
       <h2>Experience</h2>
@@ -277,7 +283,7 @@
         </ul>
       </div>
     </section>
-
+    
     <!-- Projects -->
     <section id="projects">
       <h2>Projects</h2>
@@ -290,13 +296,13 @@
       </div>
     </section>
   </main>
-
+  
   <!-- Footer -->
   <footer>
     <p>&copy; 2025 Nour Hakam. All Rights Reserved.</p>
-    <p>Contact: nour.hakam@example.com</p>
+    <p>Contact: nour313hakam@gmail.com - (+961 81196907)</p>
   </footer>
-
+  
   <!-- JavaScript for Background & Animations -->
   <script>
     /* ---------------------------
@@ -306,14 +312,14 @@
     const ctx = canvas.getContext('2d');
     let particles = [];
     const numParticles = 150;
-
+    
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
-
+    
     function initParticles() {
       particles = [];
       for (let i = 0; i < numParticles; i++) {
@@ -328,7 +334,7 @@
       }
     }
     initParticles();
-
+    
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => {
@@ -347,7 +353,7 @@
       requestAnimationFrame(animateParticles);
     }
     animateParticles();
-
+    
     /* ---------------------------
        Animate Progress Bars & Section Reveal
     ----------------------------- */
@@ -358,10 +364,10 @@
         bar.style.width = percentage + '%';
       });
     }
-
+    
     const sections = document.querySelectorAll('section');
     const observerOptions = { threshold: 0.2 };
-
+    
     const observer = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -371,7 +377,7 @@
         }
       });
     }, observerOptions);
-
+    
     sections.forEach(section => observer.observe(section));
   </script>
 </body>
