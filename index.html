@@ -3,24 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بحبك يا سارة ❤️</title>
+  <title>أنتِ الأجمل يا سارة</title>
   <style>
+    /* استيراد خط Cairo */
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
-    
-    /* إعدادات عامة وإعادة تعيين */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; background: #000; }
 
-    /* خلفية الجسيمات باستخدام Canvas */
-    #canvas-bg {
+    /* إعادة تعيين الإعدادات العامة */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    /* خلفية الجسيمات على Canvas */
+    #bg-canvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
+      background: #000;
     }
-    
+
     /* طبقة التدرج المتحرك */
     body::after {
       content: "";
@@ -29,78 +35,83 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(45deg, rgba(255,65,108,0.3), rgba(255,75,43,0.3), rgba(255,154,158,0.3), rgba(250,208,196,0.3));
-      background-size: 400% 400%;
-      animation: gradientBG 20s ease infinite;
+      background: linear-gradient(135deg, rgba(255,105,180,0.2), rgba(255,20,147,0.2), rgba(255,105,180,0.2));
+      background-size: 300% 300%;
+      animation: gradientAnim 15s ease infinite;
       z-index: 2;
     }
-    @keyframes gradientBG {
+    @keyframes gradientAnim {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    /* الحاوية الرئيسية للمحتوى */
+    /* الحاوية الرئيسية مع تأثير الزجاج (glassmorphism) */
     .container {
       position: relative;
       z-index: 3;
-      text-align: center;
-      padding: 40px;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(15px);
+      width: 90%;
       max-width: 600px;
-      margin: auto;
-      /* تأثير بسيط للتنفس (pulse) لتكون مبدع أكثر */
-      animation: pulse 3s ease-in-out infinite;
-      transform: perspective(800px);
-      transition: transform 0.3s ease;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      animation: entrance 1s ease-out;
     }
-    @keyframes pulse {
-      0%, 100% { transform: perspective(800px) scale(1); }
-      50% { transform: perspective(800px) scale(1.05); }
+    @keyframes entrance {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
-    
+
+    /* أنماط العنوان */
     h1 {
-      font-size: 4rem;
+      font-size: 3rem;
+      color: #fff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255,20,147,0.8);
+      animation: glowText 2s ease-in-out infinite alternate;
+    }
+    @keyframes glowText {
+      from { text-shadow: 0 0 10px rgba(255,20,147,0.8); }
+      to { text-shadow: 0 0 30px rgba(255,20,147,1); }
+    }
+
+    /* أنماط النص */
+    p {
+      font-size: 1.5rem;
       color: #fff;
       margin-bottom: 20px;
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #fff; }
-      to { text-shadow: 0 0 30px #ff2e63; }
-    }
-    p {
-      font-size: 1.8rem;
-      color: #fff;
-      margin-bottom: 30px;
       opacity: 0;
-      animation: fadeIn 1.5s forwards;
-      animation-delay: 0.8s;
+      animation: fadeInText 1.5s forwards;
+      animation-delay: 0.5s;
     }
-    @keyframes fadeIn {
+    @keyframes fadeInText {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* أنماط الزر */
     button {
-      background: #ff4b2b;
+      background: #ff1493;
       border: none;
-      padding: 15px 30px;
+      padding: 12px 25px;
       font-size: 1.2rem;
       color: #fff;
+      border-radius: 30px;
       cursor: pointer;
-      border-radius: 50px;
-      transition: transform 0.3s, background 0.3s;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 15px rgba(255,20,147,0.6);
     }
     button:hover {
-      background: #ff2e63;
       transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(255,20,147,0.8);
     }
-    
-    /* حاوية القلوب المتحركة */
-    #hearts-container {
+
+    /* حاوية التأثيرات (القلوب، الكونفيتي، والبتلات) */
+    #effects-container {
       position: absolute;
       top: 0;
       left: 0;
@@ -109,38 +120,58 @@
       pointer-events: none;
       z-index: 4;
     }
+
+    /* نمط تأثير القلوب */
     .heart {
       position: absolute;
       font-size: 2rem;
       opacity: 0.9;
-      animation: floatHeart linear forwards;
+      animation: heartFloat linear forwards;
     }
-    @keyframes floatHeart {
+    @keyframes heartFloat {
       0% {
         transform: translateY(100vh) scale(0.5) rotate(0deg);
         opacity: 0;
       }
-      25% { opacity: 1; }
+      20% { opacity: 1; }
       100% {
         transform: translateY(-10vh) scale(1) rotate(720deg);
         opacity: 0;
       }
     }
 
-    /* تأثير الكونفيتي */
+    /* نمط تأثير الكونفيتي */
     .confetti {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       background: currentColor;
-      opacity: 0.8;
+      opacity: 0.9;
       animation: confettiFall linear forwards;
     }
     @keyframes confettiFall {
       0% {
-        transform: translateY(-20px) rotate(0deg);
+        transform: translateY(-10px) rotate(0deg);
         opacity: 1;
       }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* تأثير بتلات الورد لإضافة رومانسية */
+    .petal {
+      position: absolute;
+      font-size: 1.5rem;
+      animation: petalFall linear forwards;
+    }
+    @keyframes petalFall {
+      0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+      }
+      20% { opacity: 1; }
       100% {
         transform: translateY(100vh) rotate(360deg);
         opacity: 0;
@@ -150,37 +181,38 @@
 </head>
 <body>
   <!-- خلفية الجسيمات -->
-  <canvas id="canvas-bg"></canvas>
+  <canvas id="bg-canvas"></canvas>
   
-  <!-- الحاوية الرئيسية للمحتوى -->
+  <!-- الحاوية الرئيسية مع الرسالة -->
   <div class="container" id="content">
     <h1>بحبك يا سارة ❤️</h1>
-    <p>عيد حب سعيد!</p>
-    <button id="heart-btn">💖 انقر ليزيد الحب 💖</button>
+    <p>أنتِ نبض قلبي وسر سعادتي</p>
+    <button id="magic-btn">💖 أضف السحر 💖</button>
   </div>
   
-  <!-- حاوية القلوب المتحركة -->
-  <div id="hearts-container"></div>
+  <!-- حاوية التأثيرات (القلوب، الكونفيتي، والبتلات) -->
+  <div id="effects-container"></div>
   
   <script>
-    /* خلفية الجسيمات باستخدام Canvas */
-    const canvas = document.getElementById('canvas-bg');
+    // نظام الجسيمات لخلفية الشاشة
+    const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    const particles = [];
-    const particleCount = 100;
+    let particles = [];
+    const particleCount = 150;
     
     class Particle {
-      constructor() { this.reset(); }
+      constructor() {
+        this.reset();
+      }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.radius = Math.random() * 2 + 1;
-        // زيادة السرعة لتصبح الحركة أسرع
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.alpha = Math.random() * 0.5 + 0.3;
+        this.radius = Math.random() * 1.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.alpha = Math.random() * 0.5 + 0.5;
       }
       update() {
         this.x += this.speedX;
@@ -210,7 +242,7 @@
       canvas.height = window.innerHeight;
     });
     
-    /* تأثير القلوب والكونفيتي */
+    // دوال لإنشاء تأثيرات القلوب، الكونفيتي، وبتلات الورد
     function random(min, max) {
       return Math.random() * (max - min) + min;
     }
@@ -218,44 +250,56 @@
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.innerHTML = '💖';
-      // تغيير اللون عشوائياً لكل قلب
-      heart.style.color = `hsl(${random(0,360)},80%,60%)`;
-      heart.style.left = random(0, 100) + 'vw';
-      // جعل مدة الحركة أسرع
-      const duration = random(2, 4);
+      heart.style.color = `hsl(${random(0, 360)}, 80%, 60%)`;
+      heart.style.left = random(5, 95) + 'vw';
+      const duration = random(2, 3);
       heart.style.animationDuration = duration + 's';
-      heart.style.animationDelay = random(0, 1) + 's';
-      document.getElementById('hearts-container').appendChild(heart);
-      setTimeout(() => { heart.remove(); }, duration * 1000);
+      heart.style.animationDelay = random(0, 0.5) + 's';
+      document.getElementById('effects-container').appendChild(heart);
+      setTimeout(() => heart.remove(), duration * 1000);
     }
     function createConfetti() {
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
       confetti.style.left = random(0, 100) + 'vw';
-      confetti.style.background = `hsl(${random(0,360)},80%,60%)`;
-      const size = random(5, 10);
-      confetti.style.width = size + 'px';
-      confetti.style.height = size + 'px';
-      const duration = random(2, 3);
+      confetti.style.background = `hsl(${random(0, 360)}, 80%, 60%)`;
+      const duration = random(1.5, 2.5);
       confetti.style.animationDuration = duration + 's';
-      document.body.appendChild(confetti);
-      setTimeout(() => { confetti.remove(); }, duration * 1000);
+      document.getElementById('effects-container').appendChild(confetti);
+      setTimeout(() => confetti.remove(), duration * 1000);
     }
-    function triggerEffects() {
-      // إنشاء عدة قلوب وقطع كونفيتي
-      for (let i = 0; i < 15; i++) {
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.innerHTML = '🌹';
+      petal.style.left = random(0, 100) + 'vw';
+      const duration = random(3, 4);
+      petal.style.animationDuration = duration + 's';
+      petal.style.animationDelay = random(0, 1) + 's';
+      document.getElementById('effects-container').appendChild(petal);
+      setTimeout(() => petal.remove(), duration * 1000);
+    }
+    function triggerMagic() {
+      // تفعيل عدة تأثيرات دفعة واحدة
+      for (let i = 0; i < 20; i++) {
         createHeart();
         createConfetti();
+        // إضافة بعض بتلات الورد بصورة عشوائية
+        if (Math.random() > 0.7) {
+          createPetal();
+        }
       }
-      // اهتزاز بسيط للجهاز إن أمكن
-      if (navigator.vibrate) { navigator.vibrate(200); }
+      // اهتزاز الجهاز إن أمكن
+      if (navigator.vibrate) {
+        navigator.vibrate(300);
+      }
     }
-    
-    // تفعيل التأثير عند النقر على الزر (يظل لون الزر ثابت)
-    document.getElementById('heart-btn').addEventListener('click', triggerEffects);
-    
-    /* كشف رجفة الهاتف باستخدام gyroscope (devicemotion) */
-    let shakeThreshold = 12; // تقليل العتبة لجعل الحركة أسرع
+
+    // تفعيل التأثير عند النقر على الزر
+    document.getElementById('magic-btn').addEventListener('click', triggerMagic);
+
+    // الكشف عن رجفة الهاتف باستخدام devicemotion
+    let shakeThreshold = 12; // يمكن تعديل العتبة حسب الحاجة
     let lastShakeTime = Date.now();
     if (window.DeviceMotionEvent) {
       window.addEventListener('devicemotion', (event) => {
@@ -265,20 +309,20 @@
           const currentTime = Date.now();
           if (totalAcc > shakeThreshold && currentTime - lastShakeTime > 800) {
             lastShakeTime = currentTime;
-            triggerEffects();
+            triggerMagic();
           }
         }
       });
     } else {
-      console.log("Device motion غير مدعوم على هذا الجهاز.");
+      console.log("devicemotion غير مدعوم.");
     }
-    
-    /* تأثير ميل الحاوية على الهاتف باستخدام deviceorientation */
+
+    // تأثير الميل للحاوية باستخدام deviceorientation
     const container = document.getElementById('content');
     if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', (e) => {
-        const rotateY = e.gamma ? e.gamma / 5 : 0; // ميل يمين/يسار
-        const rotateX = e.beta ? e.beta / 5 : 0;    // ميل أمام/خلف
+        const rotateY = e.gamma ? e.gamma / 6 : 0; // تعديل الحساسية
+        const rotateX = e.beta ? e.beta / 6 : 0;
         container.style.transform = `perspective(800px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
       });
     }
