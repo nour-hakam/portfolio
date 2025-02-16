@@ -3,132 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>أنتِ الأجمل يا سارة</title>
+  <title>قلب ينبض يا سارة</title>
   <style>
-    /* استيراد خط Cairo */
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
 
-    /* إعادة تعيين الإعدادات العامة */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
-      height: 100%;
-      overflow: hidden;
+    /* إعداد الصفحة والخلفية */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: radial-gradient(circle at center, #ff6b81, #ff4757);
+      animation: bgPulse 10s infinite alternate;
       font-family: 'Cairo', sans-serif;
+      overflow: hidden;
+    }
+    @keyframes bgPulse {
+      from { filter: brightness(1); }
+      to { filter: brightness(1.2); }
     }
 
-    /* خلفية الجسيمات على Canvas */
-    #bg-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: #000;
-    }
-
-    /* طبقة التدرج المتحرك */
-    body::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(255,105,180,0.2), rgba(255,20,147,0.2), rgba(255,105,180,0.2));
-      background-size: 300% 300%;
-      animation: gradientAnim 15s ease infinite;
-      z-index: 2;
-    }
-    @keyframes gradientAnim {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* الحاوية الرئيسية مع تأثير الزجاج (glassmorphism) */
-    .container {
+    /* الحاوية الرئيسية التي تحتوي على القلب والنصوص */
+    #heart-container {
       position: relative;
-      z-index: 3;
-      width: 90%;
-      max-width: 600px;
-      margin: 5% auto;
-      padding: 20px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      animation: entrance 1s ease-out;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
     }
-    @keyframes entrance {
-      from { transform: translateY(-30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* أنماط العنوان */
     h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       color: #fff;
       margin-bottom: 10px;
-      text-shadow: 0 0 10px rgba(255,20,147,0.8);
-      animation: glowText 2s ease-in-out infinite alternate;
     }
-    @keyframes glowText {
-      from { text-shadow: 0 0 10px rgba(255,20,147,0.8); }
-      to { text-shadow: 0 0 30px rgba(255,20,147,1); }
-    }
-
-    /* أنماط النص */
     p {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       color: #fff;
       margin-bottom: 20px;
-      opacity: 0;
-      animation: fadeInText 1.5s forwards;
-      animation-delay: 0.5s;
-    }
-    @keyframes fadeInText {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* أنماط الزر */
+    /* رسم قلب ينبض باستخدام SVG */
+    .svg-heart {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 15px;
+      fill: #fff;
+      stroke: #fff;
+      stroke-width: 2;
+      animation: heartbeat 1s infinite;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* زر إرسال نبضات القلب */
     button {
-      background: #ff1493;
+      background: #ff6b81;
       border: none;
-      padding: 12px 25px;
-      font-size: 1.2rem;
+      padding: 10px 20px;
+      font-size: 1rem;
       color: #fff;
-      border-radius: 30px;
+      border-radius: 25px;
       cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 4px 15px rgba(255,20,147,0.6);
+      transition: transform 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
     button:hover {
       transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(255,20,147,0.8);
     }
 
-    /* حاوية التأثيرات (القلوب، الكونفيتي، والبتلات) */
-    #effects-container {
+    /* تأثير النبضات المتطايرة */
+    #effects {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 4;
+      overflow: hidden;
     }
-
-    /* نمط تأثير القلوب */
-    .heart {
+    .effect-heart {
       position: absolute;
-      font-size: 2rem;
+      font-size: 1.5rem;
       opacity: 0.9;
-      animation: heartFloat linear forwards;
+      animation: effectFloat linear forwards;
     }
-    @keyframes heartFloat {
+    @keyframes effectFloat {
       0% {
         transform: translateY(100vh) scale(0.5) rotate(0deg);
         opacity: 0;
@@ -139,191 +105,74 @@
         opacity: 0;
       }
     }
-
-    /* نمط تأثير الكونفيتي */
-    .confetti {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: currentColor;
-      opacity: 0.9;
-      animation: confettiFall linear forwards;
-    }
-    @keyframes confettiFall {
-      0% {
-        transform: translateY(-10px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    /* تأثير بتلات الورد لإضافة رومانسية */
-    .petal {
-      position: absolute;
-      font-size: 1.5rem;
-      animation: petalFall linear forwards;
-    }
-    @keyframes petalFall {
-      0% {
-        transform: translateY(-10vh) rotate(0deg);
-        opacity: 0;
-      }
-      20% { opacity: 1; }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
   </style>
 </head>
 <body>
-  <!-- خلفية الجسيمات -->
-  <canvas id="bg-canvas"></canvas>
-  
-  <!-- الحاوية الرئيسية مع الرسالة -->
-  <div class="container" id="content">
-    <h1>بحبك يا سارة ❤️</h1>
-    <p>أنتِ نبض قلبي وسر سعادتي</p>
-    <button id="magic-btn">💖 أضف السحر 💖</button>
+  <div id="heart-container">
+    <!-- قلب ينبض -->
+    <svg class="svg-heart" viewBox="0 0 32 29.6">
+      <path d="M23.6,0c-3.4,0-6.4,2-8,4.9C13.8,2,10.8,0,7.4,0C3.3,0,0,3.3,0,7.4c0,4.6,4.2,8.5,10.5,14.1l3.5,3.1
+        c0.6,0.5,1.6,0.5,2.2,0l3.5-3.1C27.8,15.9,32,12,32,7.4C32,3.3,28.7,0,24.6,0H23.6z"/>
+    </svg>
+    <h1>قلب ينبض يا سارة</h1>
+    <p>أنتِ نبض حياتي، كل لحظة بدونك لا تسوى شيئاً.</p>
+    <button id="trigger-btn">أرسل نبضات قلبي</button>
   </div>
-  
-  <!-- حاوية التأثيرات (القلوب، الكونفيتي، والبتلات) -->
-  <div id="effects-container"></div>
-  
+  <div id="effects"></div>
   <script>
-    // نظام الجسيمات لخلفية الشاشة
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    let particles = [];
-    const particleCount = 150;
-    
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.radius = Math.random() * 1.5 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-        this.alpha = Math.random() * 0.5 + 0.5;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-          this.reset();
-        }
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-        ctx.fill();
-      }
-    }
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
-    }
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-    
-    // دوال لإنشاء تأثيرات القلوب، الكونفيتي، وبتلات الورد
+    // دالة للحصول على قيمة عشوائية
     function random(min, max) {
       return Math.random() * (max - min) + min;
     }
-    function createHeart() {
+
+    // إنشاء تأثير نبضات القلب المتطايرة
+    function createEffectHeart() {
       const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.innerHTML = '💖';
+      heart.classList.add('effect-heart');
+      heart.textContent = '💗';
+      heart.style.left = random(0, 100) + 'vw';
       heart.style.color = `hsl(${random(0, 360)}, 80%, 60%)`;
-      heart.style.left = random(5, 95) + 'vw';
-      const duration = random(2, 3);
+      const duration = random(1.5, 2.5);
       heart.style.animationDuration = duration + 's';
-      heart.style.animationDelay = random(0, 0.5) + 's';
-      document.getElementById('effects-container').appendChild(heart);
+      document.getElementById('effects').appendChild(heart);
       setTimeout(() => heart.remove(), duration * 1000);
     }
-    function createConfetti() {
-      const confetti = document.createElement('div');
-      confetti.classList.add('confetti');
-      confetti.style.left = random(0, 100) + 'vw';
-      confetti.style.background = `hsl(${random(0, 360)}, 80%, 60%)`;
-      const duration = random(1.5, 2.5);
-      confetti.style.animationDuration = duration + 's';
-      document.getElementById('effects-container').appendChild(confetti);
-      setTimeout(() => confetti.remove(), duration * 1000);
-    }
-    function createPetal() {
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-      petal.innerHTML = '🌹';
-      petal.style.left = random(0, 100) + 'vw';
-      const duration = random(3, 4);
-      petal.style.animationDuration = duration + 's';
-      petal.style.animationDelay = random(0, 1) + 's';
-      document.getElementById('effects-container').appendChild(petal);
-      setTimeout(() => petal.remove(), duration * 1000);
-    }
-    function triggerMagic() {
-      // تفعيل عدة تأثيرات دفعة واحدة
-      for (let i = 0; i < 20; i++) {
-        createHeart();
-        createConfetti();
-        // إضافة بعض بتلات الورد بصورة عشوائية
-        if (Math.random() > 0.7) {
-          createPetal();
-        }
+
+    // تفعيل التأثير: عند النقر أو رجفة الهاتف
+    function triggerEffects() {
+      for (let i = 0; i < 15; i++) {
+        createEffectHeart();
       }
-      // اهتزاز الجهاز إن أمكن
       if (navigator.vibrate) {
-        navigator.vibrate(300);
+        navigator.vibrate(200);
       }
     }
+    document.getElementById('trigger-btn').addEventListener('click', triggerEffects);
 
-    // تفعيل التأثير عند النقر على الزر
-    document.getElementById('magic-btn').addEventListener('click', triggerMagic);
-
-    // الكشف عن رجفة الهاتف باستخدام devicemotion
-    let shakeThreshold = 12; // يمكن تعديل العتبة حسب الحاجة
+    // كشف رجفة الهاتف باستخدام devicemotion
+    let shakeThreshold = 15;
     let lastShakeTime = Date.now();
     if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', (event) => {
+      window.addEventListener('devicemotion', function(event) {
         const acc = event.accelerationIncludingGravity;
         if (acc) {
           const totalAcc = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
           const currentTime = Date.now();
-          if (totalAcc > shakeThreshold && currentTime - lastShakeTime > 800) {
+          if (totalAcc > shakeThreshold && currentTime - lastShakeTime > 1000) {
             lastShakeTime = currentTime;
-            triggerMagic();
+            triggerEffects();
           }
         }
       });
-    } else {
-      console.log("devicemotion غير مدعوم.");
     }
 
-    // تأثير الميل للحاوية باستخدام deviceorientation
-    const container = document.getElementById('content');
+    // تأثير ميل الحاوية باستخدام deviceorientation
+    const container = document.getElementById('heart-container');
     if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', (e) => {
-        const rotateY = e.gamma ? e.gamma / 6 : 0; // تعديل الحساسية
-        const rotateX = e.beta ? e.beta / 6 : 0;
-        container.style.transform = `perspective(800px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+      window.addEventListener('deviceorientation', function(e) {
+        const rotateY = e.gamma ? e.gamma / 10 : 0;
+        const rotateX = e.beta ? e.beta / 10 : 0;
+        container.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
       });
     }
   </script>
