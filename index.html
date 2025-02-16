@@ -2,30 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nour Hakam - Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nour Hakam - Advanced Portfolio</title>
   <style>
-    /* Reset & Global Styles */
+    /* Global Reset & Base Styles */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #0a192f;
       color: #ccd6f6;
-      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
       scroll-behavior: smooth;
+    }
+
+    /* Background Particle Canvas */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
 
     /* Header & Navigation */
     header {
       position: sticky;
       top: 0;
-      background-color: #112240;
+      background-color: rgba(17, 34, 64, 0.95);
       padding: 10px 20px;
       z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .logo {
       display: flex;
@@ -54,11 +65,11 @@
     }
     nav ul li a:hover { color: #64ffda; }
 
-    /* Sections */
+    /* Section Styles */
     section {
       padding: 60px 20px;
       max-width: 1000px;
-      margin: auto;
+      margin: 0 auto;
       opacity: 0;
       transform: translateY(20px);
       transition: all 1s ease;
@@ -118,7 +129,7 @@
       transition: width 2s ease;
     }
 
-    /* List Containers for Certifications, Languages, Experience & Projects */
+    /* List Containers for Certifications, Languages, Experience, Projects */
     .list-container ul { list-style: none; }
     .list-container ul li {
       padding: 10px 0;
@@ -127,7 +138,7 @@
 
     /* Footer */
     footer {
-      background: #112240;
+      background: rgba(17, 34, 64, 0.95);
       text-align: center;
       padding: 20px;
       margin-top: 40px;
@@ -142,6 +153,9 @@
   </style>
 </head>
 <body>
+  <!-- Background Animation Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
   <!-- Header & Navigation -->
   <header>
     <div class="logo">
@@ -176,11 +190,12 @@
     <section id="about">
       <h2>About Me</h2>
       <p>
-        I'm a 20-year-old IT enthusiast passionate about cybersecurity, networking, and programming. I have hands-on experience from internships and projects, and I've been a leader in my Scout Company since 2019.
+        I'm a 20-year-old IT enthusiast passionate about cybersecurity, networking, and programming.
+        With hands-on experience from internships and projects, I strive for continuous learning and improvement.
       </p>
     </section>
 
-    <!-- Skills Section with Animated Progress Bars -->
+    <!-- Skills Section -->
     <section id="skills">
       <h2>Skills</h2>
       <div class="skill">
@@ -282,9 +297,60 @@
     <p>Contact: nour.hakam@example.com</p>
   </footer>
 
-  <!-- JavaScript for Animations -->
+  <!-- JavaScript for Background & Animations -->
   <script>
-    // Animate progress bars by setting width from data attribute
+    /* ---------------------------
+       Background Particle Animation
+    ----------------------------- */
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const numParticles = 150;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < numParticles; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 3 + 1,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          alpha: Math.random() * 0.5 + 0.2,
+        });
+      }
+    }
+    initParticles();
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        // Wrap-around the canvas edges
+        if (p.x < 0) p.x = canvas.width;
+        else if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        else if (p.y > canvas.height) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(100, 255, 218, ${p.alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ---------------------------
+       Animate Progress Bars & Section Reveal
+    ----------------------------- */
     function animateProgressBars() {
       const bars = document.querySelectorAll('.progress-bar');
       bars.forEach(bar => {
@@ -293,17 +359,14 @@
       });
     }
 
-    // Intersection Observer for section reveal animations
     const sections = document.querySelectorAll('section');
     const observerOptions = { threshold: 0.2 };
 
     const observer = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
-        if(entry.isIntersecting) {
+        if (entry.isIntersecting) {
           entry.target.classList.add('active');
-          if(entry.target.id === 'skills') {
-            animateProgressBars();
-          }
+          if(entry.target.id === 'skills') animateProgressBars();
           observer.unobserve(entry.target);
         }
       });
