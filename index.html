@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Lebanon Clock + Tasks</title>
+  <title>Lebanon Clock</title>
 
   <!-- PWA / Full‑screen helpers -->
   <meta name="theme-color" content="#151515">
@@ -14,7 +14,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
   <style>
-    /* Mobile address‑bar shrink / dynamic viewport fix */
     :root {
       --vh: 1vh;
       --bg-start: #151515;
@@ -25,259 +24,118 @@
       --border-r: 16px;
     }
     @media (orientation: landscape) {
-      body{height:calc(var(--vh)*100);}
+      body { height: calc(var(--vh) * 100); }
     }
 
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{
-      font-family:"Inter",sans-serif;
-      background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
-      display:grid;
-      grid-template-columns:7fr 3fr;
-      color:#eee;
-      overflow:hidden;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      display: grid;
+      place-items: center;
+      color: #eee;
+      overflow: hidden;
     }
 
-    /* ---------- FULLSCREEN BUTTON ---------- */
-    #fsBtn{
-      position:fixed;
-      top:18px;right:18px;
-      z-index:10;
-      background:var(--accent);
-      color:#000;
-      border:none;
-      padding:8px 14px;
-      border-radius:var(--border-r);
-      font-weight:700;
-      cursor:pointer;
-      box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    #fsBtn {
+      position: fixed;
+      top: 18px; right: 18px;
+      z-index: 10;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--border-r);
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     }
 
-    /* ------------- CLOCK ------------- */
-    .clock-wrapper{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      position:relative;
-      padding:24px;
+    .clock-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 24px;
     }
-    .clock{
-      font-family:"Roboto Mono",monospace;
-      font-size:10vw;
-      font-weight:600;
-      letter-spacing:0.06em;
-      color:var(--accent);
-      background:var(--glass);
-      backdrop-filter:blur(var(--glass-blur));
-      padding:24px 48px;
-      border-radius:var(--border-r);
-      border:1px solid rgba(255,255,255,0.08);
-    }
-
-    /* Subtle particle dots */
-    .particles{position:absolute;inset:0;pointer-events:none;}
-    .dot{
-      position:absolute;
-      width:2px;height:2px;
-      background:rgba(139,233,253,0.3);
-      border-radius:50%;
-      animation:float 30s linear infinite;
-    }
-    @keyframes float{
-      from{transform:translateY(0);}to{transform:translateY(-200vh);}
+    .clock {
+      font-family: "Roboto Mono", monospace;
+      font-size: 10vw;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      background: var(--glass);
+      backdrop-filter: blur(var(--glass-blur));
+      padding: 24px 48px;
+      border-radius: var(--border-r);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* ------------- TASKS ------------- */
-    .tasks{
-      display:flex;
-      flex-direction:column;
-      padding:32px 24px 80px;
-      background:var(--glass);
-      backdrop-filter:blur(calc(var(--glass-blur)*1.2));
-      border-left:1px solid rgba(255,255,255,0.05);
+    .particles { position: absolute; inset: 0; pointer-events: none; }
+    .dot {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: rgba(139, 233, 253, 0.3);
+      border-radius: 50%;
+      animation: float 30s linear infinite;
     }
-    .tasks h2{font-size:1.4rem;margin-bottom:16px;font-weight:600;}
-    .add{display:flex;margin-bottom:18px;}
-    .add input{
-      flex:1;
-      padding:10px 14px;
-      font-size:1rem;
-      border:none;
-      border-radius:var(--border-r) 0 0 var(--border-r);
-      background:rgba(255,255,255,0.08);
-      color:#fff;
-      outline:none;
-    }
-    .add button{
-      padding:10px 20px;
-      background:var(--accent);
-      color:#000;
-      border:none;
-      border-radius:0 var(--border-r) var(--border-r) 0;
-      font-weight:600;
-      cursor:pointer;
-    }
-    ul{list-style:none;flex:1;overflow-y:auto;padding-right:4px;}
-    li{
-      background:rgba(255,255,255,0.05);
-      margin-bottom:10px;
-      padding:10px 14px;
-      border-radius:var(--border-r);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-    li.done{opacity:0.4;text-decoration:line-through;}
-    .tick{
-      border:2px solid var(--accent);
-      background:transparent;
-      color:var(--accent);
-      border-radius:10px;
-      width:28px;height:28px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      cursor:pointer;
-    }
-
-    /* ------------- QUOTE BAR ------------- */
-    #quoteBar{
-      position:fixed;
-      bottom:48px;
-      left:50%;
-      transform:translateX(-50%);
-      background:var(--glass);
-      backdrop-filter:blur(var(--glass-blur));
-      padding:10px 24px;
-      border-radius:var(--border-r);
-      font-style:italic;
-      max-width:90vw;
-      text-align:center;
-      border:1px solid rgba(255,255,255,0.07);
-      transition:opacity 0.4s;
-    }
-
-    /* Custom scroll */
-    ul::-webkit-scrollbar{width:6px;}
-    ul::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:3px;}
-
-    /* ---------- RESPONSIVE ---------- */
-    @media(max-width:900px){
-      body{grid-template-columns:1fr;grid-template-rows:60vh 40vh;}
-      .clock{font-size:14vw;padding:16px 32px;}
-      .tasks{border-left:none;border-top:1px solid rgba(255,255,255,0.05);}
-    }
-    @media(max-width:500px){
-      .clock{font-size:18vw;}
-      .tasks h2{font-size:1.2rem;}
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-200vh); }
     }
   </style>
 </head>
 <body>
-  <!-- Fullscreen Button -->
   <button id="fsBtn">⤢ Fullscreen</button>
-
-  <!-- Clock side -->
   <div class="clock-wrapper">
     <div class="clock" id="clock">--</div>
     <div class="particles" id="particleBox"></div>
   </div>
-
-  <!-- Tasks side -->
-  <div class="tasks">
-    <h2>Tasks</h2>
-    <div class="add">
-      <input type="text" id="taskInput" placeholder="Add a task" />
-      <button id="addBtn">+</button>
-    </div>
-    <ul id="taskList"></ul>
-  </div>
-
-  <!-- Quote -->
-  <div id="quoteBar">"Simplicity is the ultimate sophistication."</div>
-
-<script>
-function setVH(){
-  document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
-}
-setVH();
-window.addEventListener('resize', setVH);
-
-const particleBox=document.getElementById('particleBox');
-const particleCount=120;
-function createParticles(){
-  particleBox.innerHTML='';
-  const w=window.innerWidth;
-  const h=window.innerHeight;
-  for(let i=0;i<particleCount;i++){
-    const d=document.createElement('span');
-    d.className='dot';
-    d.style.left=Math.random()*w+'px';
-    d.style.top=Math.random()*h+'px';
-    d.style.animationDelay=-(Math.random()*30)+'s';
-    particleBox.appendChild(d);
-  }
-}
-createParticles();
-window.addEventListener('resize',createParticles);
-
-function updateClock(){
-  const options={timeZone:'Asia/Beirut',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true};
-  document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',options);
-}
-setInterval(updateClock,1000);updateClock();
-
-function addTask(){
-  const input=document.getElementById('taskInput');
-  const txt=input.value.trim();
-  if(!txt) return;
-  const li=document.createElement('li');
-  li.innerHTML=txt+' <button class="tick" onclick="toggleDone(this)">✓</button>';
-  document.getElementById('taskList').appendChild(li);
-  input.value=''; input.focus();
-}
-document.getElementById('addBtn').addEventListener('click', addTask);
-document.getElementById('taskInput').addEventListener('keypress', function(e){
-  if(e.key==='Enter') addTask();
-});
-function toggleDone(btn){ btn.parentElement.classList.toggle('done'); }
-
-const quotes = [
-  "🌿 \"ومن يتقِ الله يجعل له مخرجاً\" – القرآن الكريم",
-  "💡 “Programs must be written for people to read.” – H. Abelson",
-  "🧘‍♂️ \"كن مع الله ترى الله معك\"",
-  "🛡️ “Security is a process, not a product.” – B. Schneier",
-  "⚛️ “React is just JavaScript.” – D. Abramov",
-  "🕊️ \"حب الله هو مفتاح السعادة\"",
-  "🚀 “Debugging is like being the detective...” – F. Fortes",
-  "🌌 “The quieter you become, the more you can hear.” – Ram Dass",
-  "🔐 “Trust, but verify.” – Proverb",
-  "🌟 “Do not grieve. Indeed, Allah is with us.” – Quran 9:40"
-];
-function rotateQuote(){
-  const bar = document.getElementById('quoteBar');
-  bar.style.opacity = 0;
-  setTimeout(() => {
-    bar.textContent = quotes[Math.floor(Math.random()*quotes.length)];
-    bar.style.opacity = 1;
-  }, 300);
-}
-setInterval(rotateQuote, 40*60*1000); rotateQuote();
-
-const fsBtn = document.getElementById('fsBtn');
-fsBtn.addEventListener('click', async () => {
-  if (!document.fullscreenElement) {
-    await document.documentElement.requestFullscreen().catch(err => alert("Fullscreen failed"));
-    if (screen.orientation && screen.orientation.lock) {
-      try { await screen.orientation.lock('landscape'); } catch(e){}
+  <script>
+    function setVH() {
+      document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
     }
-    fsBtn.textContent = '⤢ Exit';
-  } else {
-    document.exitFullscreen();
-    fsBtn.textContent = '⤢ Fullscreen';
-  }
-});
-</script>
+    setVH();
+    window.addEventListener('resize', setVH);
+
+    const particleBox = document.getElementById('particleBox');
+    const particleCount = 120;
+    function createParticles() {
+      particleBox.innerHTML = '';
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      for (let i = 0; i < particleCount; i++) {
+        const d = document.createElement('span');
+        d.className = 'dot';
+        d.style.left = Math.random() * w + 'px';
+        d.style.top = Math.random() * h + 'px';
+        d.style.animationDelay = -(Math.random() * 30) + 's';
+        particleBox.appendChild(d);
+      }
+    }
+    createParticles();
+    window.addEventListener('resize', createParticles);
+
+    function updateClock() {
+      const options = { timeZone: 'Asia/Beirut', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US', options);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    const fsBtn = document.getElementById('fsBtn');
+    fsBtn.addEventListener('click', async () => {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen().catch(err => alert("Fullscreen failed"));
+        if (screen.orientation && screen.orientation.lock) {
+          try { await screen.orientation.lock('landscape'); } catch (e) {}
+        }
+        fsBtn.textContent = '⤢ Exit';
+      } else {
+        document.exitFullscreen();
+        fsBtn.textContent = '⤢ Fullscreen';
+      }
+    });
+  </script>
 </body>
 </html>
